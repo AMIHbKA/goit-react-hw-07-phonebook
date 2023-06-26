@@ -20,6 +20,7 @@ export const Filter = () => {
           type="search"
           value={filterValue}
           onChange={handleFilterChange}
+          autocomplete="off"
         ></Input>
       )}
     </>

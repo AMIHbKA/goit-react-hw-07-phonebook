@@ -52,6 +52,7 @@ export const ContactForm = () => {
             type="text"
             name="name"
             title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+            autocomplete="off"
             required
           />
         </FormField>
@@ -62,6 +63,7 @@ export const ContactForm = () => {
             type="tel"
             name="number"
             title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+            autocomplete="off"
             required
           />
         </FormField>
