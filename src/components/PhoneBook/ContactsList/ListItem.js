@@ -24,7 +24,7 @@ export const ListItem = ({ id }) => {
       >
         <Trash width={18} height={18} />
       </Button>
-      {name}: {number}
+      {name}: <a href={`tel:${number}`}>{number}</a>
     </li>
   );
 };

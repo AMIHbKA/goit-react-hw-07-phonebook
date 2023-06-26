@@ -7,7 +7,7 @@ export const List = styled.ul`
   /* margin-top: 2em; */
   padding-inline: 0;
   list-style: none;
-  height: 56vh;
+  height: 52vh;
   overflow: auto;
   white-space: nowrap;
 `;
