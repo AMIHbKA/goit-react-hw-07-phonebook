@@ -1,4 +1,4 @@
-import { Loader } from 'components/Loader';
+import { Loader } from 'components/Loader/Loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateFilter } from 'redux/features';
 import { Input } from './Filter.styled';

@@ -13,7 +13,6 @@ export const App = () => {
 
   useEffect(() => {
     if (error) {
-      console.log(error);
       toast.error(error);
     }
   }, [error]);

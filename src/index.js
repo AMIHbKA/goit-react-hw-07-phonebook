@@ -12,9 +12,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <GlobalStyle />
     <Provider store={store}>
-      {/* <PersistGate loading={null} persistor={persistor}> */}
       <App />
-      {/* </PersistGate> */}
     </Provider>
   </React.StrictMode>
 );

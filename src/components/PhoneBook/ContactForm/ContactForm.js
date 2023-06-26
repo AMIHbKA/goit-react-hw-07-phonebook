@@ -9,8 +9,7 @@ import {
 } from './ContactForm.styled';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact, addContactAsync } from 'redux/features/index';
-// import { nanoid } from '@reduxjs/toolkit';
+import { addContactAsync } from 'redux/features/index';
 
 const ContactsSchema = Yup.object().shape({
   name: Yup.string()
@@ -30,7 +29,6 @@ const ContactsSchema = Yup.object().shape({
 });
 
 export const ContactForm = () => {
-  // const contacts = useSelector(state => state.contactsReducer.contacts);
   const dispatch = useDispatch();
   const loadingStatus = useSelector(state => state.contacts.isLoading);
 
