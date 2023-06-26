@@ -12,7 +12,6 @@ import { selectFilteredContactsIds } from 'redux/features';
 export const App = () => {
   const error = useSelector(state => state.contacts.error);
   const total = useSelector(selectFilteredContactsIds);
-  console.log('total', total);
 
   useEffect(() => {
     if (error) {
