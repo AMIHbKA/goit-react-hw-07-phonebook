@@ -21,7 +21,7 @@ export const Filter = () => {
           value={filterValue}
           onChange={handleFilterChange}
           autocomplete="off"
-        ></Input>
+        />
       )}
     </>
   );
