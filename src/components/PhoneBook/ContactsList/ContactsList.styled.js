@@ -4,12 +4,11 @@ export const List = styled.ul`
   display: flex;
   flex-direction: column;
   gap: 0.5em;
-  margin-top: 2em;
+  /* margin-top: 2em; */
   padding-inline: 0;
   list-style: none;
-  height: 67vh;
-  overflow-y: auto;
-  overflow-x: auto;
+  height: 56vh;
+  overflow: auto;
   white-space: nowrap;
 `;
 

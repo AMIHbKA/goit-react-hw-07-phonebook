@@ -9,5 +9,9 @@ export const ContactsList = () => {
     return <ListItem id={contactId} key={contactId} />;
   });
 
-  return <List>{renderedListItems}</List>;
+  return (
+    <div style={{ overflow: 'hidden', marginTop: '2em' }}>
+      <List>{renderedListItems}</List>
+    </div>
+  );
 };
