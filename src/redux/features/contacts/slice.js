@@ -3,8 +3,9 @@ import {
   createEntityAdapter,
   createSelector,
   createAsyncThunk,
-  nanoid,
 } from '@reduxjs/toolkit';
+
+const BASE_URL = 'https://64993a0679fbe9bcf83eceb6.mockapi.io/contacts';
 
 const contactsAdapter = createEntityAdapter();
 
@@ -15,13 +16,13 @@ const initialState = contactsAdapter.getInitialState({
 
 export const fetchContacts = createAsyncThunk(
   'contact/fetchContacts',
-  async () => {
+  async (_, rejectWithValue) => {
     try {
-      const response = await fetch(
-        'https://649867909543ce0f49e200a9.mockapi.io/api/contacts'
-      );
+      const response = await fetch(BASE_URL);
       return await response.json();
-    } catch (error) {}
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
   }
 );
 
@@ -29,55 +30,89 @@ export const addContactAsync = createAsyncThunk(
   'contacts/addContactAsync',
   async (newContact, { getState, rejectWithValue }) => {
     const contacts = selectContacts(getState());
-    console.log('contacts', contacts);
-    const contactExists = Object.values(contacts).find(
+    const contactExists = contacts.find(
       ({ name, number }) =>
         name === newContact.name || number === newContact.number
     );
 
     if (contactExists) {
-      return rejectWithValue(alert('This contact is already added'));
+      return rejectWithValue('This contact is already added');
     }
 
     try {
-      const response = await fetch('/api/contacts/', {
+      const response = await fetch(BASE_URL, {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify(newContact),
       });
-      console.log(newContact);
-      return await response.json;
-    } catch (error) {}
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
   }
 );
+
+export const deleteContactAsync = createAsyncThunk(
+  'contacts/deleteContactAsync',
+  async (id, rejectWithValue) => {
+    try {
+      await fetch(`${BASE_URL}/${id}`, {
+        method: 'DELETE',
+        headers: { 'Content-type': 'application/json' },
+      });
+      return id;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+const asyncActions = [fetchContacts, addContactAsync, deleteContactAsync];
 
 export const contactsSlice = createSlice({
   name: 'contacts',
   initialState,
-  reducers: {
-    // addContact: (state, action) => {
-    //   const contactToAdd = action.payload;
-
-    //   addContactAsync({ id: 12, name: 'asdf', number: '123-456-789' });
-    // },
-    deleteContact: contactsAdapter.removeOne,
-  },
-
   //thunk
   extraReducers: builder => {
     builder
-      .addCase(fetchContacts.fulfilled, (state, action) => {
-        contactsAdapter.setAll(state, action.payload);
-        state.isLoading = false;
-      })
-      .addCase(addContactAsync.fulfilled, (state, action) => {
-        contactsAdapter.addOne(state.action.payload);
-      })
-      .addCase(addContactAsync.rejected, (state, action) => {
-        if (action.payload) {
-          alert(action.payload);
+      .addMatcher(
+        action =>
+          asyncActions.some(
+            asyncAction => action.type === asyncAction.pending.toString()
+          ),
+        state => {
+          state.isLoading = true;
+          state.error = null;
         }
-      });
+      )
+      .addMatcher(
+        action =>
+          asyncActions.some(
+            asyncAction => action.type === asyncAction.fulfilled.toString()
+          ),
+        (state, action) => {
+          if (action.type === fetchContacts.fulfilled.toString()) {
+            contactsAdapter.setAll(state, action.payload);
+          } else if (action.type === addContactAsync.fulfilled.toString()) {
+            contactsAdapter.addOne(state, action.payload);
+          } else if (action.type === deleteContactAsync.fulfilled.toString()) {
+            contactsAdapter.removeOne(state, action.payload);
+          }
+          state.isLoading = false;
+          state.error = null;
+        }
+      )
+      .addMatcher(
+        action =>
+          asyncActions.some(
+            asyncAction => action.type === asyncAction.rejected.toString()
+          ),
+        (state, action) => {
+          state.isLoading = false;
+          state.error = action.payload;
+        }
+      );
   },
 });
 

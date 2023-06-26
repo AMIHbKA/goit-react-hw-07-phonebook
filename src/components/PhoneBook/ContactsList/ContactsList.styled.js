@@ -8,7 +8,6 @@ export const List = styled.ul`
   padding-inline: 0;
   list-style: none;
   height: 67vh;
-  /* max-height: 100vdh; */
   overflow-y: auto;
   overflow-x: auto;
   white-space: nowrap;

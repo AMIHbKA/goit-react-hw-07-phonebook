@@ -1,3 +1,4 @@
+import { Loader } from 'components/Loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateFilter } from 'redux/features';
 import { Input } from './Filter.styled';
@@ -7,16 +8,20 @@ export const Filter = () => {
   const dispatch = useDispatch();
   const handleFilterChange = event =>
     dispatch(updateFilter(event.target.value));
+  const loadingStatus = useSelector(state => state.contacts.isLoading);
 
   return (
     <>
-      <Input
-        placeholder="Search for contacts by name"
-        name="filter"
-        type="text"
-        value={filterValue}
-        onChange={handleFilterChange}
-      ></Input>
+      {loadingStatus && <Loader />}
+      {!loadingStatus && (
+        <Input
+          placeholder="Search for contacts by name"
+          name="filter"
+          type="text"
+          value={filterValue}
+          onChange={handleFilterChange}
+        ></Input>
+      )}
     </>
   );
 };

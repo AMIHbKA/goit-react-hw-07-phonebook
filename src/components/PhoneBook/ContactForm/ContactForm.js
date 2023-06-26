@@ -8,9 +8,9 @@ import {
   Field,
 } from './ContactForm.styled';
 import * as Yup from 'yup';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addContact, addContactAsync } from 'redux/features/index';
-import { nanoid } from '@reduxjs/toolkit';
+// import { nanoid } from '@reduxjs/toolkit';
 
 const ContactsSchema = Yup.object().shape({
   name: Yup.string()
@@ -32,6 +32,7 @@ const ContactsSchema = Yup.object().shape({
 export const ContactForm = () => {
   // const contacts = useSelector(state => state.contactsReducer.contacts);
   const dispatch = useDispatch();
+  const loadingStatus = useSelector(state => state.contacts.isLoading);
 
   return (
     <Formik
@@ -41,7 +42,7 @@ export const ContactForm = () => {
       }}
       validationSchema={ContactsSchema}
       onSubmit={(values, { resetForm }) => {
-        dispatch(addContactAsync({ ...values, id: nanoid() }));
+        dispatch(addContactAsync(values));
         resetForm();
       }}
     >
@@ -66,7 +67,9 @@ export const ContactForm = () => {
             required
           />
         </FormField>
-        <Button type="submit">Add contact</Button>
+        <Button type="submit" disabled={loadingStatus}>
+          Add contact
+        </Button>
       </Form>
     </Formik>
   );
